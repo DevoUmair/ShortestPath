@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  h1 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  svg {
+    border: 2px solid #333;
+    background-color: white;
+    cursor: crosshair;
+  }
+  
+  circle {
+    fill: steelblue;
+  }
+  
+  text {
+    font-size: 12px;
+    fill: black;
+  }
+  
+  line {
+    stroke-width: 2;
+  }
+  
+  .arrowhead {
+    fill: currentColor;
+  }
+  

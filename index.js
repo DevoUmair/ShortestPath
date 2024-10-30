@@ -37,38 +37,59 @@ let cities = []; // Store city coordinates
         function drawRoute(route, isShortest) {
           let color;
           if (isShortest) {
-            color = '#FF0000';
+              color = '#FF0000';
           } else {
-            color = getRandomColor(); // Generate a random color
-          }
-        
-          // Remove existing arrowheads before drawing new ones
-          svg.selectAll(".arrowhead").remove();
-        
-          for (let i = 0; i < route.length - 1; i++) {
-            const from = route[i];
-            const to = route[i + 1];
-        
-            // Draw the line between cities
-            svg.append("line")
-              .attr("x1", from.x)
-              .attr("y1", from.y)
-              .attr("x2", to.x)
-              .attr("y2", to.y)
-              .attr("stroke", color)
-              .attr("stroke-width", 2);
-        
-            // Calculate the midpoint for the arrowhead
-            const midPoint = {
-              x: (from.x + to.x) / 2,
-              y: (from.y + to.y) / 2
-            };
-        
-            // Draw arrowhead at the midpoint
-            drawArrowhead(midPoint, from, to, color);
+              color = getRandomColor(); // Generate a random color
           }
       
-        }
+          // Remove existing arrowheads before drawing new ones
+          svg.selectAll(".arrowhead").remove();
+      
+          // Calculate the total time to complete the entire route animation
+          const totalTime = (route.length - 1) * 1000 + 1000;
+      
+          for (let i = 0; i < route.length - 1; i++) {
+              const from = route[i];
+              const to = route[i + 1];
+      
+              // Calculate distance between points for the animation length
+              const distance = Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
+      
+              // Draw the line with dash properties for animation
+              svg.append("line")
+                  .attr("x1", from.x)
+                  .attr("y1", from.y)
+                  .attr("x2", to.x)
+                  .attr("y2", to.y)
+                  .attr("stroke", color)
+                  .attr("stroke-width", 2)
+                  .attr("stroke-dasharray", distance) // Set dash array to match length
+                  .attr("stroke-dashoffset", distance) // Set initial offset to hide line
+                  .transition() // Add transition for drawing effect
+                  .delay(i * 1000) // Delay for each segment
+                  .duration(1000) // Duration of animation in ms
+                  .attr("stroke-dashoffset", 0); // Set offset to 0 to draw the line
+      
+              // Calculate the midpoint for the arrowhead
+              const midPoint = {
+                  x: (from.x + to.x) / 2,
+                  y: (from.y + to.y) / 2
+              };
+      
+              // Draw arrowhead at the midpoint after the line animation completes
+              setTimeout(() => drawArrowhead(midPoint, from, to, color), i * 1000 + 1000);
+          }
+      
+          // Enable buttons after the entire route animation completes
+          if(isShortest){
+            setTimeout(() => {
+              enableButtons();
+          }, totalTime);
+          }
+      }
+      
+      
+      
         
         // Function to draw an arrowhead at the midpoint of a line
         function drawArrowhead(midPoint, from, to, color) {
@@ -124,6 +145,7 @@ let cities = []; // Store city coordinates
         function displayRoutesSequentially() {
           if (currentRouteIndex >= allRoutes.length) {
             clearInterval(routeInterval); // Stop when all routes have been displayed
+            enableButtons()
             return;
           }
         
@@ -139,6 +161,7 @@ let cities = []; // Store city coordinates
             return;
           }
         
+          disableButtons()
           allRoutes = []; // Clear previous routes
           currentRouteIndex = 0; // Reset the route index
         
@@ -149,8 +172,10 @@ let cities = []; // Store city coordinates
           // Clear previous routes immediately before starting the interval and redraw all cities
           svg.selectAll("*").remove(); // Clear previous drawings
           cities.forEach(drawCity); 
+
+          const totTime = cities.length * 1000
         
-          routeInterval = setInterval(displayRoutesSequentially, 2000); // Display each route every 2 seconds
+          routeInterval = setInterval(displayRoutesSequentially, totTime + 400); // Display each route every 2 seconds
         });
         
         // Reset the canvas and clear data
@@ -183,6 +208,7 @@ let cities = []; // Store city coordinates
         } 
 
         function findGreedyRoute() {
+          disableButtons()
           const visited = new Array(cities.length).fill(false); // Track visited cities
           const route = [cities[0]]; // Start from City 0
           visited[0] = true; // Mark City 0 as visited
@@ -223,3 +249,28 @@ let cities = []; // Store city coordinates
         shortesteBtn.addEventListener("click" , () => {
           findGreedyRoute()
         })
+
+        function enableButtons() {
+          console.log("button enabled");
+          resetBtn.disabled = false;
+          solveBtn.disabled = false;
+          shortesteBtn.disabled = false;
+
+          resetBtn.classList.remove('disabled')
+          solveBtn.classList.remove('disabled')
+          shortesteBtn.classList.remove('disabled')
+
+        }
+        
+        // Function to disable all buttons
+        function disableButtons() {
+            console.log("button disabled");
+            resetBtn.disabled = true;
+            solveBtn.disabled = true;
+            shortesteBtn.disabled = true;
+
+            
+          resetBtn.classList.add('disabled')
+          solveBtn.classList.add('disabled')
+          shortesteBtn.classList.add('disabled')
+        }

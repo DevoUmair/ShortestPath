@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traveling Salesman Problem</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div id="tsp-container">
+    <!-- Buttons for controlling the visualization -->
+    <button id="solve-btn">Solve</button>
+    <button id="reset-btn">Reset</button>
+
+    <!-- Distance display -->
+    <div id="distance" class="none"></div>
+
+    <!-- Table to show routes and distances -->
+    <div id="routesTableContainer">
+      <table id="routesTable">
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Path</th>
+            <th>Distance</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="no-data">
+        No routes yet. Click 'Solve' to calculate the routes.
+      </div>
+    </div>
+
+    <!-- SVG Canvas for drawing cities and routes -->
+    <svg id="tsp-canvas" width="100%" height="500px"></svg>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
+
+
+

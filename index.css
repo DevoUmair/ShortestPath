@@ -269,11 +269,3 @@ font-size: 23px;
 text-align: center;
 width: 100%;
 }
-
-#distance.none{
-  display: none;
-}
-
-#distance.show{
-  display: block;
-}

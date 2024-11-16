@@ -7,6 +7,9 @@ let cities = []; // Store city coordinates
         const resetBtn = document.getElementById("reset-btn"); // Reset button
         const solveBtn = document.getElementById("solve-btn"); // Solve button
         const shortesteBtn = document.getElementById("shortest-btn"); // Solve button
+        const distnceCon = document.getElementById("distance"); // Solve button
+
+        distnceCon.classList.add('none')
         
         // Add a new city when the SVG canvas is clicked
         svg.on("click", function (event) {
@@ -33,20 +36,19 @@ let cities = []; // Store city coordinates
             .attr("fill", "black");
         }
         
-        // Draw a single route with a random color
         function drawRoute(route, isShortest) {
           let color;
           if (isShortest) {
               color = '#FF0000';
           } else {
-              color = getRandomColor(); // Generate a random color
+              color = getRandomColor();
           }
       
           // Remove existing arrowheads before drawing new ones
           svg.selectAll(".arrowhead").remove();
       
           // Calculate the total time to complete the entire route animation
-          const totalTime = (route.length - 1) * 1000 + 1000;
+          const totalTime = (route.length - 1) * 500 + 500;
       
           for (let i = 0; i < route.length - 1; i++) {
               const from = route[i];
@@ -66,8 +68,8 @@ let cities = []; // Store city coordinates
                   .attr("stroke-dasharray", distance) // Set dash array to match length
                   .attr("stroke-dashoffset", distance) // Set initial offset to hide line
                   .transition() // Add transition for drawing effect
-                  .delay(i * 1000) // Delay for each segment
-                  .duration(1000) // Duration of animation in ms
+                  .delay(i * 500) // Delay for each segment
+                  .duration(500) // Duration of animation in ms
                   .attr("stroke-dashoffset", 0); // Set offset to 0 to draw the line
       
               // Calculate the midpoint for the arrowhead
@@ -77,23 +79,23 @@ let cities = []; // Store city coordinates
               };
       
               // Draw arrowhead at the midpoint after the line animation completes
-              setTimeout(() => drawArrowhead(midPoint, from, to, color), i * 1000 + 1000);
+              setTimeout(() => drawArrowhead(midPoint, from, to, color), i * 500 + 500);
           }
       
           // Enable buttons after the entire route animation completes
           if(isShortest){
             setTimeout(() => {
               enableButtons();
-          }, totalTime);
+            }, totalTime);
           }
-      }
+        }
       
       
       
         
         // Function to draw an arrowhead at the midpoint of a line
         function drawArrowhead(midPoint, from, to, color) {
-          const arrowLength = 10; // Length of the arrowhead
+          const arrowLength = 13; // Length of the arrowhead
           const arrowWidth = 5;   // Width of the arrowhead
 
           // Calculate the angle of the line
@@ -138,17 +140,25 @@ let cities = []; // Store city coordinates
                   [arr[l], arr[i]] = [arr[i], arr[l]]; // Swap back
               }
           }
-      }
+        }
       
         
         // Display all routes one by one with a delay
         function displayRoutesSequentially() {
           if (currentRouteIndex >= allRoutes.length) {
+            distnceCon.classList.add('none')
+            distnceCon.classList.remove('show')
             clearInterval(routeInterval); // Stop when all routes have been displayed
             enableButtons()
             return;
           }
-        
+
+          const distanse = (calculateTotalDistance(allRoutes[currentRouteIndex]) * 0.03).toFixed(2);
+          distnceCon.innerHTML= `Total Distance -  ${distanse} Km`
+          distnceCon.classList.remove('none')
+          distnceCon.classList.add('show')
+          console.log(distanse);
+
           svg.selectAll("line").remove(); // Clear the previous route lines
           drawRoute(allRoutes[currentRouteIndex] , false); // Draw the current route
           currentRouteIndex++; // Move to the next route
@@ -156,6 +166,7 @@ let cities = []; // Store city coordinates
         
         // Solve TSP and start displaying routes sequentially
         solveBtn.addEventListener("click", () => {
+          console.log("start");
           if (cities.length < 2) {
             alert("Add at least two cities to solve the problem.");
             return;
@@ -175,7 +186,7 @@ let cities = []; // Store city coordinates
 
           const totTime = cities.length * 1000
         
-          routeInterval = setInterval(displayRoutesSequentially, totTime + 400); // Display each route every 2 seconds
+          routeInterval = setInterval(displayRoutesSequentially, totTime + 1000); // Display each route every 2 seconds
         });
         
         // Reset the canvas and clear data

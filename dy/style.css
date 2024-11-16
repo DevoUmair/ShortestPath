@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 900px; /* Increased the max width for desktop screens */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+#city-map {
+  width: 100%;
+  max-width: 600px; /* Limits map width for large screens */
+  margin: 0 auto; /* Centering the map */
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 1.1rem; /* Adjust font size for readability */
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+p {
+  font-size: 1rem;
+}
+
+#shortest-path, #min-path-cost {
+  font-weight: bold;
+}
+
+.city {
+  fill: red;
+  cursor: pointer;
+}
+
+.city-label {
+  font-size: 12px;
+  fill: black;
+}
+
+#memoization-table-container {
+  margin-top: 30px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+#memoization-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#memoization-table th, #memoization-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+#memoization-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+#memoization-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#memoization-table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+#memoization-table td {
+  font-family: monospace;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    width: 90%;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  #memoization-table {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 95%;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  #memoization-table {
+    font-size: 0.9rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  #memoization-table {
+    font-size: 0.9rem;
+  }
+}
+

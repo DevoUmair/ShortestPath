@@ -11,17 +11,39 @@
   <h1>Traveling Salesman Problem Visualization</h1>
 
   <section class="main-conatiner" >
-      <div class="path-conatiner" >
-        <svg id="tsp-canvas" width="100%" height="450"></svg>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63320.42984403517!2d80.62578144999999!3d7.2945453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy%2C%20Sri%20Lanka!5e0!3m2!1sen!2s!4v1731762931063!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        <p id="distance" ></p>
+      <div class="container-01" >
+        <div class="path-conatiner" >
+          <svg id="tsp-canvas" width="100%" height="450"></svg>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63320.42984403517!2d80.62578144999999!3d7.2945453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae366266498acd3%3A0x411a3818a1e03c35!2sKandy%2C%20Sri%20Lanka!5e0!3m2!1sen!2s!4v1731762931063!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <p id="distance" ></p>
+        </div>
+    
+        <div class="btn-container" >
+          <button class="btn solve-btn" id="solve-btn">Find All Routes</button>
+          <!-- <button class="btn shortest-btn" id="shortest-btn">Shortest Route</button>/ -->
+          <button class="btn reset-btn" id="reset-btn">Reset</button>
+        </div>  
       </div>
-  
-      <div class="btn-container" >
-        <button class="btn solve-btn" id="solve-btn">Solve</button>
-        <button class="btn shortest-btn" id="shortest-btn">Shortest Route</button>
-        <button class="btn reset-btn" id="reset-btn">Reset</button>
-      </div>  
+      <div class="container-02">
+        <div class="no-data" >
+          <h5>Please Select The Cities And Find The routes</h5>
+        </div>
+        <div class="table-container">
+          <table id="routesTable" >
+            <caption>Routes Information</caption>
+            <thead>
+              <tr>
+                <th>Route Name</th>
+                <th>Route Path</th>
+                <th>Total Distance (km)</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
   </section>
   
   

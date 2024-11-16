@@ -7,9 +7,6 @@ let cities = []; // Store city coordinates
         const resetBtn = document.getElementById("reset-btn"); // Reset button
         const solveBtn = document.getElementById("solve-btn"); // Solve button
         const shortesteBtn = document.getElementById("shortest-btn"); // Solve button
-        const distnceCon = document.getElementById("distance"); // Solve button
-
-        distnceCon.classList.add('none')
         
         // Add a new city when the SVG canvas is clicked
         svg.on("click", function (event) {
@@ -36,19 +33,20 @@ let cities = []; // Store city coordinates
             .attr("fill", "black");
         }
         
+        // Draw a single route with a random color
         function drawRoute(route, isShortest) {
           let color;
           if (isShortest) {
               color = '#FF0000';
           } else {
-              color = getRandomColor();
+              color = getRandomColor(); // Generate a random color
           }
       
           // Remove existing arrowheads before drawing new ones
           svg.selectAll(".arrowhead").remove();
       
           // Calculate the total time to complete the entire route animation
-          const totalTime = (route.length - 1) * 500 + 500;
+          const totalTime = (route.length - 1) * 1000 + 1000;
       
           for (let i = 0; i < route.length - 1; i++) {
               const from = route[i];
@@ -68,8 +66,8 @@ let cities = []; // Store city coordinates
                   .attr("stroke-dasharray", distance) // Set dash array to match length
                   .attr("stroke-dashoffset", distance) // Set initial offset to hide line
                   .transition() // Add transition for drawing effect
-                  .delay(i * 500) // Delay for each segment
-                  .duration(500) // Duration of animation in ms
+                  .delay(i * 1000) // Delay for each segment
+                  .duration(1000) // Duration of animation in ms
                   .attr("stroke-dashoffset", 0); // Set offset to 0 to draw the line
       
               // Calculate the midpoint for the arrowhead
@@ -79,33 +77,31 @@ let cities = []; // Store city coordinates
               };
       
               // Draw arrowhead at the midpoint after the line animation completes
-              setTimeout(() => drawArrowhead(midPoint, from, to, color), i * 500 + 500);
+              setTimeout(() => drawArrowhead(midPoint, from, to, color), i * 1000 + 1000);
           }
       
           // Enable buttons after the entire route animation completes
           if(isShortest){
             setTimeout(() => {
               enableButtons();
-            }, totalTime);
+          }, totalTime);
           }
-        }
+      }
       
       
       
         
         // Function to draw an arrowhead at the midpoint of a line
         function drawArrowhead(midPoint, from, to, color) {
-          const arrowLength = 13; // Length of the arrowhead
+          const arrowLength = 10; // Length of the arrowhead
           const arrowWidth = 5;   // Width of the arrowhead
 
-          // Calculate the angle of the line
-          const angle = Math.atan2(to.y - from.y, to.x - from.x);
+  const angle = Math.atan2(to.y - from.y, to.x - from.x);
 
-          // Calculate the points for the arrowhead
-          const x1 = midPoint.x - arrowLength * Math.cos(angle - Math.PI / 6);
-          const y1 = midPoint.y - arrowLength * Math.sin(angle - Math.PI / 6);
-          const x2 = midPoint.x - arrowLength * Math.cos(angle + Math.PI / 6);
-          const y2 = midPoint.y - arrowLength * Math.sin(angle + Math.PI / 6);
+  const x1 = midPoint.x - arrowLength * Math.cos(angle - Math.PI / 6);
+  const y1 = midPoint.y - arrowLength * Math.sin(angle - Math.PI / 6);
+  const x2 = midPoint.x - arrowLength * Math.cos(angle + Math.PI / 6);
+  const y2 = midPoint.y - arrowLength * Math.sin(angle + Math.PI / 6);
 
           // Draw the arrowhead and assign a class for easy selection
           svg.append("polygon")
@@ -140,25 +136,17 @@ let cities = []; // Store city coordinates
                   [arr[l], arr[i]] = [arr[i], arr[l]]; // Swap back
               }
           }
-        }
+      }
       
         
         // Display all routes one by one with a delay
         function displayRoutesSequentially() {
           if (currentRouteIndex >= allRoutes.length) {
-            distnceCon.classList.add('none')
-            distnceCon.classList.remove('show')
             clearInterval(routeInterval); // Stop when all routes have been displayed
             enableButtons()
             return;
           }
-
-          const distanse = (calculateTotalDistance(allRoutes[currentRouteIndex]) * 0.03).toFixed(2);
-          distnceCon.innerHTML= `Total Distance -  ${distanse} Km`
-          distnceCon.classList.remove('none')
-          distnceCon.classList.add('show')
-          console.log(distanse);
-
+        
           svg.selectAll("line").remove(); // Clear the previous route lines
           drawRoute(allRoutes[currentRouteIndex] , false); // Draw the current route
           currentRouteIndex++; // Move to the next route
@@ -166,7 +154,6 @@ let cities = []; // Store city coordinates
         
         // Solve TSP and start displaying routes sequentially
         solveBtn.addEventListener("click", () => {
-          console.log("start");
           if (cities.length < 2) {
             alert("Add at least two cities to solve the problem.");
             return;
@@ -186,7 +173,7 @@ let cities = []; // Store city coordinates
 
           const totTime = cities.length * 1000
         
-          routeInterval = setInterval(displayRoutesSequentially, totTime + 1000); // Display each route every 2 seconds
+          routeInterval = setInterval(displayRoutesSequentially, totTime + 400); // Display each route every 2 seconds
         });
         
         // Reset the canvas and clear data
@@ -204,84 +191,121 @@ let cities = []; // Store city coordinates
           return Math.sqrt(dx * dx + dy * dy); // Euclidean distance
         }
 
-      
-        function calculateTotalDistance(route) {
-          let totalDistance = 0;
-      
-          for (let i = 0; i < route.length - 1; i++) {
-              totalDistance += calculateDistance(route[i], route[i + 1]);
-          }
-          
-          // Add distance back to the starting city
-          totalDistance += calculateDistance(route[route.length - 1], route[0]);
-          
-          return totalDistance;
-        } 
+//Calculate the distance of route
+function calculateTotalDistance(route) {
+  let totalDistance = 0;
 
-        function findGreedyRoute() {
-          disableButtons()
-          const visited = new Array(cities.length).fill(false); // Track visited cities
-          const route = [cities[0]]; // Start from City 0
-          visited[0] = true; // Mark City 0 as visited
-        
-          let currentCity = cities[0];
-        
-          for (let i = 1; i < cities.length; i++) {
-            let nearestCity = null;
-            let shortestDistance = Infinity;
-        
-            // Find the nearest unvisited city
-            for (let j = 0; j < cities.length; j++) {
-              if (!visited[j]) {
-                const distance = calculateDistance(currentCity, cities[j]);
-                if (distance < shortestDistance) {
-                  shortestDistance = distance;
-                  nearestCity = cities[j];
-                }
-              }
-            }
-        
-            // Move to the nearest city
-            visited[cities.indexOf(nearestCity)] = true; // Mark as visited
-            route.push(nearestCity);
-            currentCity = nearestCity; // Update the current city
-          }
-        
-          // Connect back to the starting city
-          route.push(cities[0]);
-          console.log(route);
+  for (let i = 0; i < route.length - 1; i++) {
+      totalDistance += calculateDistance(route[i], route[i + 1]);
+  }
+  
+  totalDistance += calculateDistance(route[route.length - 1], route[0]);
+  
+  return totalDistance;
+} 
 
-          svg.selectAll("*").remove(); // Clear previous drawings
-          cities.forEach(drawCity); 
-        
-          drawRoute(route , true); // Draw the current route
+// Solve TSP and start displaying routes sequentially
+solveBtn.addEventListener("click", () => {
+  allRoutedata = []
+  document.querySelector("#routesTable tbody").innerHTML = ''; 
+  toggleTableVisibility()
+
+  if (cities.length < 2) {
+    alert("Add at least two cities to solve the problem.");
+    return;
+  }
+
+  disableButtons()
+  allRoutes = [];
+  currentRouteIndex = 0; 
+
+  const otherCities = cities.slice(1); 
+  console.log(otherCities);
+  permute(otherCities, 0, otherCities.length - 1); 
+
+  svg.selectAll("*").remove(); 
+  cities.forEach(drawCity); 
+
+  const totTime = cities.length * 700
+
+  routeInterval = setInterval(displayRoutesSequentially, totTime + 700); 
+});
+
+function findGreedyRoute() {
+  disableButtons()
+  const visited = new Array(cities.length).fill(false); 
+  const route = [cities[0]]; 
+  visited[0] = true; 
+
+  let currentCity = cities[0];
+
+  for (let i = 1; i < cities.length; i++) {
+    let nearestCity = null;
+    let shortestDistance = Infinity;
+
+    for (let j = 0; j < cities.length; j++) {
+      if (!visited[j]) {
+        const distance = calculateDistance(currentCity, cities[j]);
+        if (distance < shortestDistance) {
+          shortestDistance = distance;
+          nearestCity = cities[j];
         }
+      }
+    }
 
-        shortesteBtn.addEventListener("click" , () => {
-          findGreedyRoute()
-        })
+    visited[cities.indexOf(nearestCity)] = true; 
+    route.push(nearestCity);
+    currentCity = nearestCity; 
+  }
 
-        function enableButtons() {
-          console.log("button enabled");
-          resetBtn.disabled = false;
-          solveBtn.disabled = false;
-          shortesteBtn.disabled = false;
+  route.push(cities[0]);
+  console.log(route);
 
-          resetBtn.classList.remove('disabled')
-          solveBtn.classList.remove('disabled')
-          shortesteBtn.classList.remove('disabled')
+  svg.selectAll("*").remove(); 
+  cities.forEach(drawCity); 
 
-        }
-        
-        // Function to disable all buttons
-        function disableButtons() {
-            console.log("button disabled");
-            resetBtn.disabled = true;
-            solveBtn.disabled = true;
-            shortesteBtn.disabled = true;
+  drawRoute(route , true);
+}
 
-            
-          resetBtn.classList.add('disabled')
-          solveBtn.classList.add('disabled')
-          shortesteBtn.classList.add('disabled')
-        }
+
+resetBtn.addEventListener("click", () => {
+  allRoutedata = []
+  document.querySelector("#routesTable tbody").innerHTML = ''; 
+  toggleTableVisibility()
+  distnceCon.classList.add('none')
+  distnceCon.classList.remove('show')
+  cities = [];
+  allRoutes = [];
+  currentRouteIndex = 0;
+  clearInterval(routeInterval); 
+  svg.selectAll("*").remove(); 
+});
+
+
+function enableButtons() {
+  console.log("button enabled");
+  resetBtn.disabled = false;
+  solveBtn.disabled = false;
+  // shortesteBtn.disabled = false;
+
+  resetBtn.classList.remove('disabled')
+  solveBtn.classList.remove('disabled')
+  // shortesteBtn.classList.remove('disabled')
+
+}
+
+function disableButtons() {
+    console.log("button disabled");
+    resetBtn.disabled = true;
+    solveBtn.disabled = true;
+    // shortesteBtn.disabled = true;
+
+    
+  resetBtn.classList.add('disabled')
+  solveBtn.classList.add('disabled')
+  // shortesteBtn.classList.add('disabled')
+}
+
+     // shortesteBtn.addEventListener("click" , () => {
+//   findGreedyRoute()
+// })

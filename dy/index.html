@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive TSP Map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Interactive TSP Map</h1>
+    <p>Click on the map to place cities and then click "Solve TSP" to find the shortest path.</p>
+
+    <div id="city-map">
+      
+      <svg width="600" height="400"></svg>
+    </div>
+
+    <div class="controls">
+      <button id="solve-btn">Solve TSP</button>
+      <button id="clear-btn">Clear Map</button>
+
+      <div>
+        <p><strong>Shortest Path:</strong> <span id="shortest-path">-</span></p>
+        <p><strong>Minimum Path Cost:</strong> <span id="min-path-cost">-</span></p>
+      </div>
+    </div>
+
+
+    <div id="memoization-table-container">
+      <h3>Memoization Table</h3>
+      <table id="memoization-table">
+        <thead>
+          <tr>
+            <th>City</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html> 
+
+
+
